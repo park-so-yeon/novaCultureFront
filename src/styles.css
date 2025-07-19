@@ -36,10 +36,8 @@
 
 .form-group input {
   width: 100%;
-  max-width: 320px;
+  max-width: 450px;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
   box-sizing: border-box;
 }
 
@@ -1285,7 +1283,6 @@ body, .main-page {
 
 .auth-page {
   color:#363945;
-  min-height: 100vh;
   background: #FDF6E3;
   display: flex;
   flex-direction: column;
@@ -1301,8 +1298,8 @@ body, .main-page {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  min-width: 320px;
-  max-width: 360px;
+  min-width: 450px;
+  max-width: 500px;
 }
 
 .auth-form input {
@@ -1315,7 +1312,6 @@ body, .main-page {
 
 .auth-form button {
   background: #FDF6E3;
-  min-width: 80px;
   color: #363945;
   border: none;
   border-radius: 6px;
@@ -1984,4 +1980,23 @@ input.error:focus {
   color: #777;
   font-weight: bold;
   margin: 10px 0;
+}
+
+.signup-complete-btn {
+  padding: 12px 36px;
+  font-size: 18px;
+  cursor: pointer;
+  background: #e5cfa3;
+  color: #3B2C1A;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 0 2px 8px rgba(78,84,200,0.10);
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-top: 32px;
+}
+.signup-complete-btn:hover {
+  background: #d1b77a;
+  box-shadow: 0 4px 16px rgba(78,84,200,0.10);
 }

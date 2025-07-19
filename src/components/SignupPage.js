@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles.css'; // 전역 CSS 파일
+import { useNavigate } from 'react-router-dom';
 
 const TERMS = [
     {
@@ -24,6 +25,9 @@ const TERMS = [
 ];
 
 function SignupPage() {
+
+	const navigate = useNavigate();
+
     // 회원가입 단계 관리: 'terms' -> 'verification' -> 'signup'
     const [currentStep, setCurrentStep] = useState('terms');
 
@@ -43,9 +47,13 @@ function SignupPage() {
     const [emailSentCode, setEmailSentCode] = useState(''); // 이메일 인증번호 발송 여부 확인 (실제 발송된 코드)
 
     // 회원가입 폼 상태 및 아이디 중복검사
-    const [form, setForm] = useState({ userId: '', password: '', passwordConfirm: '', phone: '', email: '' });
+    const [form, setForm] = useState({ userId: '', password: '', passwordConfirm: '', phone: '', email: '', phoneInput: '', birth: '', address: '', detailAddress: '' });
     const [idCheckResult, setIdCheckResult] = useState(null); // null | 'OK' | 'DUPLICATE' | 'ERROR'
     const [errors, setErrors] = useState({});
+
+    // 메시지 상태 추가 (alert 대체)
+    const [message, setMessage] = useState("");
+    const [emailMessage, setEmailMessage] = useState("");
 
     // 인증 방식 변경 시 상태 초기화
     useEffect(() => {
@@ -81,7 +89,7 @@ function SignupPage() {
     const handleChange = e => {
         const { name, value } = e.target;
         // 휴대폰 번호 입력 시 숫자만 허용
-        if (name === 'phone') {
+        if (name === 'phone' || name === 'phoneInput') {
             const onlyNums = value.replace(/[^0-9]/g, '');
             setForm(prev => ({ ...prev, [name]: onlyNums }));
         } else {
@@ -99,7 +107,7 @@ function SignupPage() {
         }
         try {
             // 실제 API 호출 시에는 form.userId를 서버로 전송
-            const res = await axios.get(`/api/users/check-id?userId=${encodeURIComponent(form.userId)}`);
+            const res = await axios.get(`/api/signup/check-id?userId=${encodeURIComponent(form.userId)}`);
             if (res.data.available) { // 예시: { available: true }
                 setIdCheckResult('OK');
             } else { // 예시: { available: false }
@@ -114,6 +122,7 @@ function SignupPage() {
     // 이메일 인증번호 발송
     const handleSendEmailCode = async () => {
         setErrors(prev => ({ ...prev, email: undefined }));
+        setEmailMessage("");
         if (!form.email || !/\S+@\S+\.\S+/.test(form.email)) {
             setErrors(e => ({ ...e, email: '유효한 이메일 주소를 입력해주세요.' }));
             return;
@@ -121,7 +130,7 @@ function SignupPage() {
         try {
             await axios.post('/api/signup/send-email-code', { email: form.email });
             setEmailSentCode('sent');
-            alert('인증번호가 발송되었습니다!');
+            setEmailMessage('인증번호가 발송되었습니다!');
         } catch (error) {
             setErrors(e => ({ ...e, email: '인증번호 발송 중 오류가 발생했습니다.' }));
         }
@@ -138,7 +147,7 @@ function SignupPage() {
             if (res.data === true) {
                 setIsEmailVerified(true);
                 setErrors(prev => ({ ...prev, email: undefined, emailCode: undefined }));
-                alert('이메일 인증이 완료되었습니다.');
+                setMessage('이메일 인증이 완료되었습니다.');
             } else {
                 setIsEmailVerified(false);
                 setErrors(prev => ({ ...prev, emailCode: '인증번호가 일치하지 않거나 올바르지 않습니다.' }));
@@ -158,7 +167,7 @@ function SignupPage() {
         try {
             await axios.post('/api/signup/send-phone-code', { phone: form.phone });
             setPhoneSentCode('sent');
-            alert('인증번호가 발송되었습니다!');
+            setMessage('인증번호가 발송되었습니다!');
         } catch (error) {
             setErrors(e => ({ ...e, phone: '인증번호 발송 중 오류가 발생했습니다.' }));
         }
@@ -175,7 +184,7 @@ function SignupPage() {
             if (res.data === true) {
                 setIsPhoneVerified(true);
                 setErrors(prev => ({ ...prev, phone: undefined, phoneCode: undefined }));
-                alert('휴대폰 인증이 완료되었습니다.');
+                setMessage('휴대폰 인증이 완료되었습니다.');
             } else {
                 setIsPhoneVerified(false);
                 setErrors(prev => ({ ...prev, phoneCode: '인증번호가 일치하지 않거나 올바르지 않습니다.' }));
@@ -192,6 +201,12 @@ function SignupPage() {
         if (!form.userId) newErrors.userId = '아이디를 입력하세요.';
         if (idCheckResult !== 'OK') newErrors.userId = '아이디 중복확인을 해주세요.';
         if (!form.password) newErrors.password = '비밀번호를 입력하세요.';
+        // 비밀번호 길이 및 특수문자 체크 추가
+        if (form.password && form.password.length < 8) {
+            newErrors.password = '비밀번호는 8자 이상이어야 합니다.';
+        } else if (form.password && !/[!@#$%^&*(),.?":{}|<>\[\]\\/~`_+=;'\-]/.test(form.password)) {
+            newErrors.password = '비밀번호에 특수문자를 1개 이상 포함해야 합니다.';
+        }
         if (!form.passwordConfirm) newErrors.passwordConfirm = '비밀번호 확인을 입력하세요.';
         if (form.password !== form.passwordConfirm) newErrors.passwordConfirm = '비밀번호가 일치하지 않습니다.';
 
@@ -209,19 +224,22 @@ function SignupPage() {
     const handleSubmitSignup = async (e) => {
         e.preventDefault();
         if (!validateSignupForm()) {
-            alert('필수 입력 정보를 확인해주세요.');
+            setMessage('필수 입력 정보를 확인해주세요.');
             return;
         }
         try {
-            const res = await axios.post('/api/signup', {
-                userId: form.userId,
-                password: form.password,
-                phone: form.phone,
-                email: form.email
+            const res = await axios.post('/api/signup/userRegister', {
+                userId: form.userId
+				, userName: form.userName
+                , password: form.password
+                , phone: form.phone
+				, address: form.address
+                , email: form.email
+				, birth: form.birth
+                , isAdAgreed: checked.terms3 ? 'Y' : 'N'
             });
             if (res.data === true) {
-                alert('회원가입이 완료되었습니다!');
-                // TODO: 회원가입 성공 후 페이지 이동 등 추가
+                navigate('/signup-complete');
             } else {
                 setErrors(prev => ({ ...prev, general: '회원가입 실패' }));
             }
@@ -230,9 +248,22 @@ function SignupPage() {
         }
     };
 
+    // 주소 검색 팝업 열기
+    const handleAddressSearch = () => {
+        if (window.daum && window.daum.Postcode) {
+            new window.daum.Postcode({
+                oncomplete: function(data) {
+                    setForm(prev => ({ ...prev, address: data.address }));
+                }
+            }).open();
+        } else {
+            alert('주소 검색 API를 불러올 수 없습니다.');
+        }
+    };
+
     return (
         <div className="page-container auth-page">
-            <h2>회원가입</h2>
+            {currentStep !== 'verification' && <h2>회원가입</h2>}
 
             {currentStep === 'terms' && (
                 <div className="terms-box">
@@ -373,34 +404,35 @@ function SignupPage() {
                                     </button>
                                 </div>
                                 {errors.email && <p className="error-msg">{errors.email}</p>}
+                                {emailMessage && <div style={{ color: 'red', marginTop: 8 }}>{emailMessage}</div>}
                             </div>
                             {emailSentCode === 'sent' && !isEmailVerified && (
-                                <div className="form-group"> {/* form-group 클래스 추가 */}
-                                    <label htmlFor="emailCode" className="form-label">인증번호</label>
-                                    <div style={{ display: 'flex', gap: '10px' }}>
-                                        <input
-                                            type="text"
-                                            id="emailCode"
-                                            name="emailCode" // name 속성 추가
-                                            placeholder="인증번호 6자리 입력"
-                                            className={`form-control ${errors.emailCode ? 'error' : ''}`}
-                                            value={form.emailCode || ''} // form.emailCode 사용, 초기값 '' 설정
-                                            onChange={handleChange} // handleChange 사용
-                                            maxLength="6"
-                                            disabled={isEmailVerified}
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={handleVerifyEmail}
-                                            disabled={isEmailVerified}
-                                        >
-                                            인증 확인
-                                        </button>
-                                    </div>
-                                    {errors.emailCode && <p className="error-msg">{errors.emailCode}</p>}
-                                </div>
+                            <div className="form-group"> {/* form-group 클래스 추가 */}
+								<label htmlFor="emailCode" className="form-label">인증번호</label>
+								<div style={{ display: 'flex', gap: '10px' }}>
+									<input
+										type="text"
+										id="emailCode"
+										name="emailCode" // name 속성 추가
+										placeholder="인증번호 6자리 입력"
+										className={`form-control ${errors.emailCode ? 'error' : ''}`}
+										value={form.emailCode || ''} // form.emailCode 사용, 초기값 '' 설정
+										onChange={handleChange} // handleChange 사용
+										maxLength="6"
+										disabled={isEmailVerified}
+									/>
+									<button
+										type="button"
+										onClick={handleVerifyEmail}
+										disabled={isEmailVerified}
+									>
+										인증 확인
+									</button>
+								</div>
+								{errors.emailCode && <p className="error-msg">{errors.emailCode}</p>}
+							</div>
                             )}
-                            {isEmailVerified && <p className="green-text">인증이 완료되었습니다!</p>}
+                            {isEmailVerified && <p className="green-text">인증이 완료되었습니다</p>}
                         </div>
                     )}
 
@@ -417,12 +449,13 @@ function SignupPage() {
                             선택된 인증 방식(휴대폰 또는 이메일)을 완료해야 다음 단계로 진행할 수 있습니다.
                         </div>
                     }
+                    {/* 메시지 표시 (alert 대체) */}
+                    {message && <div style={{ color: 'red', marginTop: 8 }}>{message}</div>}
                 </div>
             )}
 
             {currentStep === 'signup' && (
                 <form className="auth-form" onSubmit={handleSubmitSignup}>
-                    <h3>회원 정보 입력</h3>
                     <div className="form-group"> {/* form-group 클래스 추가 */}
                         <label htmlFor="userId" className="form-label">아이디</label>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -437,12 +470,25 @@ function SignupPage() {
                             />
                             <button type="button" onClick={checkDuplicateId}>중복확인</button>
                         </div>
-                        {idCheckResult === 'OK' && <p className="green-text">사용가능</p>}
+                        {idCheckResult === 'OK' && <p className="green-text">사용가능한 아이디입니다.</p>}
                         {idCheckResult === 'DUPLICATE' && <p className="error-msg">중복된 아이디입니다.</p>}
                         {idCheckResult === 'ERROR' && <p className="error-msg">아이디 중복 확인 중 오류가 발생했습니다.</p>}
                         {errors.userId && <p className="error-msg">{errors.userId}</p>}
                     </div>
-
+					<div className="form-group">
+					<label htmlFor="userName" className="form-label">이름</label>
+					<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+						<input
+							type="text"
+							id="userName"
+							name="userName"
+							placeholder="이름"
+							className={`form-control ${errors.userId ? 'error' : ''}`}
+							value={form.userName}
+							onChange={handleChange}
+						/>
+					</div>
+					</div>
                     <div className="form-group">
                         <label htmlFor="password" className="form-label">비밀번호</label>
                         <input
@@ -454,6 +500,10 @@ function SignupPage() {
                             value={form.password}
                             onChange={handleChange}
                         />
+                        {/* 비밀번호 규칙 안내문구 추가 */}
+                        <div style={{ fontSize: '13px', color: '#666', marginTop: '4px' }}>
+                            비밀번호는 8자 이상, 특수문자 1개 이상 포함해야 합니다.
+                        </div>
                         {errors.password && <p className="error-msg">{errors.password}</p>}
                     </div>
 
@@ -469,6 +519,63 @@ function SignupPage() {
                             onChange={handleChange}
                         />
                         {errors.passwordConfirm && <p className="error-msg">{errors.passwordConfirm}</p>}
+                        {!errors.passwordConfirm && form.password && form.passwordConfirm && form.password !== form.passwordConfirm && (
+                            <p className="error-msg">입력한 비밀번호랑 다릅니다.</p>
+                        )}
+                    </div>
+
+                    {/* 휴대폰번호 입력란 (본인인증과 별개로 입력받음) */}
+                    <div className="form-group">
+                        <label htmlFor="phoneInput" className="form-label">휴대폰 번호</label>
+                        <input
+                            type="tel"
+                            id="phoneInput"
+                            name="phoneInput"
+                            placeholder="'-' 없이 숫자만 입력"
+                            className="form-control"
+                            value={form.phoneInput}
+                            onChange={handleChange}
+                            maxLength="11"
+                        />
+                    </div>
+
+                    {/* 생년월일 입력란 */}
+                    <div className="form-group">
+                        <label htmlFor="birth" className="form-label">생년월일</label>
+                        <input
+                            type="date"
+                            id="birth"
+                            name="birth"
+                            className="form-control"
+                            value={form.birth}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    {/* 주소 입력란 */}
+                    <div className="form-group">
+                        <label htmlFor="address" className="form-label">주소</label>
+                        <input
+                            type="text"
+                            id="address"
+                            name="address"
+                            placeholder="주소를 입력하세요"
+                            className="form-control"
+                            value={form.address}
+                            readOnly
+                            onClick={handleAddressSearch}
+                        />
+                        {/* 상세주소 입력란 */}
+                        <input
+                            type="text"
+                            id="detailAddress"
+                            name="detailAddress"
+                            placeholder="상세주소를 입력하세요"
+                            className="form-control"
+                            value={form.detailAddress}
+                            onChange={handleChange}
+                            style={{ marginTop: 8 }}
+                        />
                     </div>
 
                     {/* 본인인증으로 자동 입력되는 필드 */}
