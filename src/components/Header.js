@@ -12,6 +12,7 @@ function Header() {
   const [showPwModal, setShowPwModal] = useState(false);
   const [pwInput, setPwInput] = useState('');
   const [pwError, setPwError] = useState('');
+  const [hoveredBtn, setHoveredBtn] = useState(null); // 'myinfo' | 'logout' | null
 
   useEffect(() => {
     setUserName(localStorage.getItem('userName'));
@@ -74,12 +75,58 @@ function Header() {
           <a href="https://www.instagram.com/_nova_cultural.center?igsh=MmpxbjI5NWJrZDdp" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><FaInstagram /></a>
           <a href="https://blog.naver.com" target="_blank" rel="noopener noreferrer" aria-label="Blogger"><FaBloggerB /></a>
           {userName ? (
-            <span style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-              <button onClick={handleMyInfoClick} className="header-login-btn" style={{ background: 'none', border: 'none', color: '#3B2C1A', fontSize: '1.5rem', cursor: 'pointer', padding: 0 }} aria-label="내정보">
+            <span style={{ display: 'flex', alignItems: 'center', gap: 0, position: 'relative' }}>
+              <button
+                onClick={handleMyInfoClick}
+                className="header-login-btn"
+                style={{ background: 'none', border: 'none', color: '#3B2C1A', fontSize: '1.5rem', cursor: 'pointer', padding: 0, position: 'relative' }}
+                aria-label="내정보"
+                onMouseEnter={() => setHoveredBtn('myinfo')}
+                onMouseLeave={() => setHoveredBtn(null)}
+              >
                 <FaUser />
+                {hoveredBtn === 'myinfo' && (
+                  <span style={{
+                    position: 'absolute',
+                    top: '110%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: '#fff',
+                    color: '#3B2C1A',
+                    fontSize: 13,
+                    padding: '2px 8px',
+                    borderRadius: 6,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    whiteSpace: 'nowrap',
+                    zIndex: 10
+                  }}>내정보</span>
+                )}
               </button>
-              <button onClick={handleLogout} className="header-login-btn" style={{ background: 'none', border: 'none', color: '#3B2C1A', fontSize: '1.5rem', cursor: 'pointer', padding: 0 }} aria-label="로그아웃">
+              <button
+                onClick={handleLogout}
+                className="header-login-btn"
+                style={{ background: 'none', border: 'none', color: '#3B2C1A', fontSize: '1.5rem', cursor: 'pointer', padding: 0, position: 'relative' }}
+                aria-label="로그아웃"
+                onMouseEnter={() => setHoveredBtn('logout')}
+                onMouseLeave={() => setHoveredBtn(null)}
+              >
                 <FiLogOut />
+                {hoveredBtn === 'logout' && (
+                  <span style={{
+                    position: 'absolute',
+                    top: '110%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: '#fff',
+                    color: '#3B2C1A',
+                    fontSize: 13,
+                    padding: '2px 8px',
+                    borderRadius: 6,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    whiteSpace: 'nowrap',
+                    zIndex: 10
+                  }}>로그아웃</span>
+                )}
               </button>
             </span>
           ) : (

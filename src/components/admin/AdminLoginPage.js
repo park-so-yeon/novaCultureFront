@@ -50,26 +50,34 @@ function AdminLoginPage() {
   };
 
   return (
-    <div className="admin-login-container">
-      <h2>관리자 로그인</h2>
-      <form className="admin-login-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="관리자 아이디"
-          value={id}
-          onChange={e => setId(e.target.value)}
-          className="admin-input"
-        />
-        <input
-          type="password"
-          placeholder="비밀번호"
-          value={pw}
-          onChange={e => setPw(e.target.value)}
-          className="admin-input"
-        />
-        <button type="submit" className="admin-login-btn">로그인</button>
-        {error && <div className="admin-error-msg">{error}</div>}
-      </form>
+    <div style={{ minHeight: '100vh', background: '#f7f7f7', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 56, marginBottom: 32 }}>
+        <img src="/nova_logo.jpg" alt="노바문화센터 로고" style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover', marginBottom: 12, boxShadow: '0 2px 8px rgba(191,161,107,0.08)' }} />
+        <div style={{ fontWeight: 'bold', fontSize: 22, color: '#3B2C1A', marginBottom: 4, letterSpacing: 1 }}>노바문화센터 관리자페이지</div>
+      </div>
+      <div className="admin-login-container" style={{ maxWidth: 500, width: '100%', margin: '0 auto', alignSelf: 'center' }}>
+        <h2>관리자 로그인</h2>
+        <form className="admin-login-form" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="관리자 아이디"
+            value={id}
+            onChange={e => setId(e.target.value)}
+            className="admin-input"
+          />
+          <input
+            type="password"
+            placeholder="비밀번호"
+            value={pw}
+            onChange={e => setPw(e.target.value)}
+            className="admin-input"
+          />
+          <button type="submit" className="admin-login-btn">로그인</button>
+          {message && (
+            <div style={{ color: messageType === 'error' ? '#d32f2f' : '#388e3c', marginTop: 16, fontWeight: 'bold' }}>{message}</div>
+          )}
+        </form>
+      </div>
     </div>
   );
 }

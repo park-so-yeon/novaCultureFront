@@ -36,7 +36,7 @@ function CourseListPage() {
             <label>Search: </label>
             <input value={search} onChange={e => setSearch(e.target.value)} className="admin-input" style={{ width: 140 }} />
             <button className="admin-list-btn">검색</button>
-            <button className="admin-list-btn">등록하기</button>
+            <Link to="/admin/courses/new" className="admin-list-btn">등록하기</Link>
           </div>
         </div>
         {loading ? (
