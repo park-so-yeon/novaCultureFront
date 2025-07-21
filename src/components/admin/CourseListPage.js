@@ -12,8 +12,9 @@ function CourseListPage() {
   useEffect(() => {
     setLoading(true);
     setError('');
-    axios.get('/api/course/courseList')
+    axios.post('/api/course/courseList', {}, { withCredentials: true })
       .then(res => {
+        console.log(res);
         setCourses(res.data || []);
         setLoading(false);
       })
@@ -24,21 +25,28 @@ function CourseListPage() {
   }, []);
 
   const filtered = courses.filter(c =>
-    c.title?.includes(search) || c.teacher?.includes(search) || c.category?.includes(search)
+    (c.courseName || '').toLowerCase().includes(search.toLowerCase()) ||
+    (c.description || '').toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <>
+    <div>
       <h2 className="admin-list-title">강좌 목록</h2>
       <div className="admin-list-page">
         <div className="admin-list-toolbar" style={{ justifyContent: 'flex-end' }}>
           <div className="admin-list-search" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <label>Search: </label>
-            <input value={search} onChange={e => setSearch(e.target.value)} className="admin-input" style={{ width: 140 }} />
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="admin-input"
+              style={{ width: 140 }}
+            />
             <button className="admin-list-btn">검색</button>
             <Link to="/admin/courses/new" className="admin-list-btn">등록하기</Link>
           </div>
         </div>
+
         {loading ? (
           <div style={{ padding: 32, textAlign: 'center' }}>불러오는 중...</div>
         ) : error ? (
@@ -50,9 +58,7 @@ function CourseListPage() {
                 <tr>
                   <th>No</th>
                   <th>강좌명</th>
-                  <th>강사</th>
-                  <th>카테고리</th>
-                  <th>메모</th>
+                  <th>강좌정보</th>
                   <th>작성자</th>
                   <th>등록일</th>
                 </tr>
@@ -60,23 +66,32 @@ function CourseListPage() {
               <tbody>
                 {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={7} style={{ textAlign: 'center', color: '#888', padding: '32px 0' }}>강좌가 없습니다.</td>
+                    <td colSpan={7} style={{ textAlign: 'center', color: '#888', padding: '32px 0' }}>
+                      강좌가 없습니다.
+                    </td>
                   </tr>
                 ) : (
                   filtered.map((course, idx) => (
                     <tr key={course.id || idx}>
-                      <td>{course.id || idx + 1}</td>
-                      <td><Link to={`/admin/courses/${course.id}`}>{course.title}</Link></td>
-                      <td>{course.teacher}</td>
-                      <td>{course.category}</td>
-                      <td>{course.memo}</td>
-                      <td>{course.author}</td>
-                      <td>{course.createdAt}</td>
+                      <td>{idx + 1}</td>
+                      <td>
+                        <Link to={`/admin/courses/${course.id}`}>
+                          {course.courseName || '-'}
+                        </Link>
+                      </td>
+                      <td>{course.description || '-'}</td>
+                      <td>{course.regId || '-'}</td>
+                      <td>
+                        {course.createdAt
+                          ? new Date(course.createdAt).toLocaleString()
+                          : '-'}
+                      </td>
                     </tr>
                   ))
                 )}
               </tbody>
             </table>
+
             <div className="admin-list-footer">
               <span>Showing {filtered.length} of {courses.length} entries</span>
               <div className="admin-list-pagination">
@@ -88,8 +103,8 @@ function CourseListPage() {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }
 
-export default CourseListPage; 
+export default CourseListPage;

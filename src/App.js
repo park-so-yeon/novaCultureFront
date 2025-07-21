@@ -1,5 +1,14 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, Outlet } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+  useNavigate,
+  Outlet,
+  Link,
+  useLocation
+} from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import MainPage from './components/MainPage';
@@ -13,16 +22,37 @@ import SignupPage from './components/SignupPage';
 import SignupCompletePage from './components/SignupCompletePage';
 import AdminLoginPage from './components/admin/AdminLoginPage';
 import AdminMainPage from './components/admin/AdminMainPage';
-import { useState } from 'react';
 import CourseListPage from './components/admin/CourseListPage';
-import CourseDetailPage from './components/admin/CourseDetailPage';
+import CourseRegPage from './components/admin/CourseRegPage';
 import TeacherListPage from './components/admin/TeacherListPage';
 import TeacherRegisterPage from './components/admin/TeacherRegisterPage';
+import AdminHeader from './components/admin/AdminHeader';
+import SemesterListPage from './components/admin/SemesterListPage';
+import './admin.css';
 
-// AdminLayout: 왼쪽 고정 메뉴 + Outlet(본문)
+// ProtectedAdminRoute: admin path 접근 시 세션 검증 후 인증 실패 시 로그인으로 리다이렉트
+function ProtectedAdminRoute({ children }) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    fetch('/api/auth/adminSession', { credentials: 'include' })
+      .then(res => {
+        if (res.status === 401) {
+          navigate('/administrator', { replace: true });
+        }
+      })
+      .catch(() => {
+        navigate('/administrator', { replace: true });
+      });
+  }, [navigate]);
+
+  return children;
+}
+
+// AdminLayout: 왼쪽 메뉴 + 헤더 + Outlet
 function AdminLayout() {
-  const [courseMenuHover, setCourseMenuHover] = useState(false);
-  const isCourseActive = window.location.pathname.startsWith('/admin/courses');
+  const location = useLocation();
+  const [hoveredMenu, setHoveredMenu] = useState(null);
+
   return (
     <div className="admin-layout">
       <aside className="admin-sidemenu">
@@ -30,31 +60,95 @@ function AdminLayout() {
           <img src="/nova_logo.jpg" alt="노바문화센터 로고" className="admin-logo" />
         </div>
         <nav className="admin-menu-list">
-          <div style={{ width: '100%' }}
-            onMouseEnter={() => setCourseMenuHover(true)}
-            onMouseLeave={() => setCourseMenuHover(false)}
+          {/* 학기관리 */}
+          <div
+            style={{ width: '100%' }}
+            onMouseEnter={() => setHoveredMenu('semesters')}
+            onMouseLeave={() => setHoveredMenu(null)}
           >
             <Link
-              to="/admin/courses"
-              className={isCourseActive ? 'active' : ''}
-              style={{ display: 'block', cursor: 'pointer', padding: '10px 0', textAlign: 'center', fontWeight: 'bold', fontSize: '1.1rem', borderRadius: 8, background: (courseMenuHover || isCourseActive) ? '#bfa16b' : undefined, color: (courseMenuHover || isCourseActive) ? '#fff' : '#3B2C1A', transition: 'background 0.18s, color 0.18s' }}
+              to="/admin/semesters"
+              className={location.pathname.startsWith('/admin/semesters') ? 'active' : ''}
             >
-              강좌관리
+              학기관리
             </Link>
-            {(courseMenuHover || isCourseActive) && (
-              <div className="admin-submenu" style={{ display: 'flex', flexDirection: 'column', gap: 0, background: '#f7f7f7', borderRadius: 8, marginTop: 2 }}>
-                <Link to="/admin/courses" className={window.location.pathname === '/admin/courses' ? 'active' : ''} style={{ padding: '10px 0', textAlign: 'center', color: '#3B2C1A', borderRadius: 8, textDecoration: 'none', fontWeight: 'normal', fontSize: '1rem' }}>전체 강좌</Link>
-                <Link to="/admin/courses/new" className={window.location.pathname === '/admin/courses/new' ? 'active' : ''} style={{ padding: '10px 0', textAlign: 'center', color: '#3B2C1A', borderRadius: 8, textDecoration: 'none', fontWeight: 'normal', fontSize: '1rem' }}>강좌 등록</Link>
-                <Link to="/admin/courses/categories" className={window.location.pathname === '/admin/courses/categories' ? 'active' : ''} style={{ padding: '10px 0', textAlign: 'center', color: '#3B2C1A', borderRadius: 8, textDecoration: 'none', fontWeight: 'normal', fontSize: '1rem' }}>강좌 카테고리 관리</Link>
+            {(hoveredMenu === 'semesters' || location.pathname.startsWith('/admin/semesters')) && (
+              <div className="admin-submenu">
+                <Link to="/admin/semesters" className={location.pathname === '/admin/semesters' ? 'active' : ''}>학기목록</Link>
+                <Link to="/admin/semesters/new" className={location.pathname === '/admin/semesters/new' ? 'active' : ''}>학기등록</Link>
               </div>
             )}
           </div>
-          <Link to="/admin/teachers" className={window.location.pathname.startsWith('/admin/teachers') ? 'active' : ''}>강사관리</Link>
-          <Link to="/admin/users" className={window.location.pathname === '/admin/users' ? 'active' : ''}>회원관리</Link>
-          <Link to="/admin/reservations" className={window.location.pathname === '/admin/reservations' ? 'active' : ''}>예약관리</Link>
+          {/* 강좌관리 */}
+          <div
+            style={{ width: '100%' }}
+            onMouseEnter={() => setHoveredMenu('courses')}
+            onMouseLeave={() => setHoveredMenu(null)}
+          >
+            <Link
+              to="/admin/courses"
+              className={location.pathname.startsWith('/admin/courses') ? 'active' : ''}
+            >
+              강좌관리
+            </Link>
+            {(hoveredMenu === 'courses' || location.pathname.startsWith('/admin/courses')) && (
+              <div className="admin-submenu">
+                <Link to="/admin/courses" className={location.pathname === '/admin/courses' ? 'active' : ''}>전체 강좌</Link>
+                <Link to="/admin/courses/new" className={location.pathname === '/admin/courses/new' ? 'active' : ''}>강좌 등록</Link>
+              </div>
+            )}
+          </div>
+          {/* 강사관리 */}
+          <div
+            style={{ width: '100%' }}
+            onMouseEnter={() => setHoveredMenu('teachers')}
+            onMouseLeave={() => setHoveredMenu(null)}
+          >
+            <Link
+              to="/admin/teachers"
+              className={location.pathname.startsWith('/admin/teachers') ? 'active' : ''}
+            >
+              강사관리
+            </Link>
+            {(hoveredMenu === 'teachers' || location.pathname.startsWith('/admin/teachers')) && (
+              <div className="admin-submenu">
+                <Link to="/admin/teachers" className={location.pathname === '/admin/teachers' ? 'active' : ''}>강사 목록</Link>
+                <Link to="/admin/teachers/new" className={location.pathname === '/admin/teachers/new' ? 'active' : ''}>강사 등록</Link>
+              </div>
+            )}
+          </div>
+          {/* 회원관리 */}
+          <div
+            style={{ width: '100%' }}
+            onMouseEnter={() => setHoveredMenu('users')}
+            onMouseLeave={() => setHoveredMenu(null)}
+          >
+            <Link
+              to="/admin/users"
+              className={location.pathname === '/admin/users' ? 'active' : ''}
+            >
+              회원관리
+            </Link>
+            {/* 필요시 회원관리 서브메뉴 추가 가능 */}
+          </div>
+          {/* 예약관리 */}
+          <div
+            style={{ width: '100%' }}
+            onMouseEnter={() => setHoveredMenu('reservations')}
+            onMouseLeave={() => setHoveredMenu(null)}
+          >
+            <Link
+              to="/admin/reservations"
+              className={location.pathname === '/admin/reservations' ? 'active' : ''}
+            >
+              예약관리
+            </Link>
+            {/* 필요시 예약관리 서브메뉴 추가 가능 */}
+          </div>
         </nav>
       </aside>
       <main className="admin-main-content">
+        <AdminHeader />
         <Outlet />
       </main>
     </div>
@@ -71,19 +165,32 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/signup-complete" element={<SignupCompletePage />} />
         <Route path="/administrator" element={<AdminLoginPage />} />
-        <Route path="/admin/*" element={<AdminLayout />}>
+
+        {/* Admin Routes */}
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedAdminRoute>
+              <AdminLayout />
+            </ProtectedAdminRoute>
+          }
+        >
           <Route index element={<AdminMainPage />} />
           <Route path="courses" element={<CourseListPage />} />
-          <Route path="courses/:id" element={<CourseDetailPage />} />
+          <Route path="courses/:id" element={<CourseRegPage />} />
           <Route path="teachers" element={<TeacherListPage />} />
           <Route path="teachers/new" element={<TeacherRegisterPage />} />
-          {/* 예시: <Route path="courses" element={<AdminCoursesPage />} /> 등 추가 가능 */}
+          <Route path="semesters" element={<SemesterListPage />} />
         </Route>
+
         <Route path="/programs" element={<ProgramsPage />} />
         <Route path="/reservation" element={<ReservationPage />} />
         <Route path="/reservation/:id" element={<ProgramDetailPage />} />
         <Route path="/instructors" element={<InstructorsPage />} />
         <Route path="/news" element={<NewsPage />} />
+
+        {/* Unknown routes -> Home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Footer />
     </Router>

@@ -12,41 +12,58 @@ function AdminLoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-	setMessage('');
-	setMessageType('');
-	try {
-	  const res = await fetch('/api/auth/adminLogin', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ userId: id, password: pw })
-	  });
-  
-	  if (res.ok) {
-		const data = await res.json();
-		if (data.userId) {
-		  localStorage.setItem('userName', data.userName);
-		  setMessage('로그인에 성공했습니다.');
-		  setMessageType('success');
-		  setTimeout(() => navigate('/admin'), 700);
-		} else {
-		  setMessage('사용자 정보를 찾을 수 없습니다.');
-		  setMessageType('error');
-		}
-	  } else {
-		const errorData = await res.json();
-		if (errorData.message === '아이디가 존재하지 않습니다.') {
-		  setMessage('존재하지 않는 아이디입니다.');
-		} else if (errorData.message === '비밀번호가 일치하지 않습니다.') {
-		  setMessage('비밀번호가 틀렸습니다.');
-		} else {
-		  setMessage(errorData.message || '로그인 실패');
-		}
-		setMessageType('error');
-	  }
-	} catch (err) {
-	  setMessage('로그인 중 오류가 발생했습니다.');
-	  setMessageType('error');
-	}
+    setMessage('');
+    setMessageType('');
+    try {
+      // 로그인 요청
+      const res = await fetch('/api/auth/adminLogin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: id, password: pw }),
+        credentials: 'include' // 서버에서 Set-Cookie로 세션ID를 내려줄 경우 필요
+      });
+
+      if (res.ok) {
+        // 1. 서버에서 세션 생성 및 수명 설정
+        // 2. 서버가 Set-Cookie로 session id를 내려주면 브라우저가 자동 저장 (credentials: 'include' 사용 시)
+        // 3. 서버가 session id를 response body로 내려줄 경우 아래처럼 저장
+        let sessionId = null;
+        try {
+          const data = await res.json();
+          if (data.sessionId) {
+            sessionId = data.sessionId;
+            sessionStorage.setItem('sessionId', sessionId); // 명시적으로 저장
+          }
+          if (data.userName) {
+            sessionStorage.setItem('userName', data.userName);
+          }
+          if (data.userId) {
+            setMessage('로그인에 성공했습니다.');
+            setMessageType('success');
+            setTimeout(() => navigate('/admin'), 700);
+          } else {
+            setMessage('사용자 정보를 찾을 수 없습니다.');
+            setMessageType('error');
+          }
+        } catch (err) {
+          setMessage('로그인 응답 처리 중 오류가 발생했습니다.');
+          setMessageType('error');
+        }
+      } else {
+        const errorData = await res.json();
+        if (errorData.message === '아이디가 존재하지 않습니다.') {
+          setMessage('존재하지 않는 아이디입니다.');
+        } else if (errorData.message === '비밀번호가 일치하지 않습니다.') {
+          setMessage('비밀번호가 틀렸습니다.');
+        } else {
+          setMessage(errorData.message || '로그인 실패');
+        }
+        setMessageType('error');
+      }
+    } catch (err) {
+      setMessage('로그인 중 오류가 발생했습니다.');
+      setMessageType('error');
+    }
   };
 
   return (

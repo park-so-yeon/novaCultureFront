@@ -16,7 +16,7 @@ function AdminMainPage() {
           <Link to="/admin/reservations" className={location.pathname === '/admin/reservations' ? 'active' : ''}>예약관리</Link>
         </nav>
       </aside>
-      <main className="admin-main-content">
+      <main className="admin-main-content" style={{ marginTop: 64 }}>
         <div className="admin-login-container">
           <h2>관리자 메인페이지</h2>
           <p>관리자님, 환영합니다!<br/>여기서 회원, 예약, 프로그램 등 관리가 가능합니다.</p>

@@ -11,14 +11,20 @@ const SideMenu = ({ isAdmin }) => {
           <h2>관리자 메뉴</h2>
         </div>
         <nav className="menu-items">
-          <Link 
-            to="/admin/courses" 
+          <Link
+            to="/admin/semesters"
+            className={`menu-item ${location.pathname === '/admin/semesters' ? 'active' : ''}`}
+          >
+            학기관리
+          </Link>
+          <Link
+            to="/admin/courses"
             className={`menu-item ${location.pathname === '/admin/courses' ? 'active' : ''}`}
           >
-            수강 메뉴 설정
+            강좌관리
           </Link>
-          <Link 
-            to="/admin/reservations" 
+          <Link
+            to="/admin/reservations"
             className={`menu-item ${location.pathname === '/admin/reservations' ? 'active' : ''}`}
           >
             예약 관리
@@ -34,26 +40,26 @@ const SideMenu = ({ isAdmin }) => {
         <h2>메뉴</h2>
       </div>
       <nav className="menu-items">
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className={`menu-item ${location.pathname === '/' ? 'active' : ''}`}
         >
           홈
         </Link>
-        <Link 
-          to="/courses" 
+        <Link
+          to="/courses"
           className={`menu-item ${location.pathname === '/courses' ? 'active' : ''}`}
         >
           강좌 목록
         </Link>
-        <Link 
-          to="/reservation" 
+        <Link
+          to="/reservation"
           className={`menu-item ${location.pathname === '/reservation' ? 'active' : ''}`}
         >
           수강 신청
         </Link>
-        <Link 
-          to="/my-reservations" 
+        <Link
+          to="/my-reservations"
           className={`menu-item ${location.pathname === '/my-reservations' ? 'active' : ''}`}
         >
           내 예약
@@ -63,4 +69,4 @@ const SideMenu = ({ isAdmin }) => {
   );
 };
 
-export default SideMenu; 
+export default SideMenu;
