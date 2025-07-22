@@ -22,12 +22,12 @@ import SignupPage from './components/SignupPage';
 import SignupCompletePage from './components/SignupCompletePage';
 import AdminLoginPage from './components/admin/AdminLoginPage';
 import AdminMainPage from './components/admin/AdminMainPage';
-import CourseListPage from './components/admin/CourseListPage';
-import CourseRegPage from './components/admin/CourseRegPage';
-import TeacherListPage from './components/admin/TeacherListPage';
-import TeacherRegisterPage from './components/admin/TeacherRegisterPage';
+import CourseListPage from './components/admin/course/CourseListPage';
+import CourseRegPage from './components/admin/course/CourseRegPage';
+import TeacherListPage from './components/admin/teacher/TeacherListPage';
+import TeacherRegisterPage from './components/admin/teacher/TeacherRegisterPage';
 import AdminHeader from './components/admin/AdminHeader';
-import SemesterListPage from './components/admin/SemesterListPage';
+import SemesterListPage from './components/admin/semester/SemesterListPage';
 import './admin.css';
 
 // ProtectedAdminRoute: admin path 접근 시 세션 검증 후 인증 실패 시 로그인으로 리다이렉트
