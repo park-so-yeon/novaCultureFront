@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 function AdminHeader() {
   const [adminName] = useState(sessionStorage.getItem('userName') || '');
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -14,82 +15,103 @@ function AdminHeader() {
   };
 
   return (
-    <header className="admin-header" style={{
-      width: '100%',
-      background: '#fff',
-      borderBottom: '2px solid #bfa16b',
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      zIndex: 99
-    }}>
-      <div
-        style={{
-          maxWidth: 1200,
-          margin: '0 auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          height: 64,
-          padding: '0 24px',
-          boxSizing: 'border-box',
-          width: '100%'
-        }}
-      >
-        {adminName ? (
-          <>
-            <span style={{ color: '#3B2C1A', fontWeight: 'bold', fontSize: 17, whiteSpace: 'nowrap' }}>
-              {adminName} 님
-            </span>
-            <button
-              onClick={handleLogout}
-              style={{
-                background: '#bfa16b',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 6,
-                padding: '8px 18px',
-                fontWeight: 'bold',
-                fontSize: 15,
-                cursor: 'pointer',
-                marginLeft: 12,
-                whiteSpace: 'nowrap'
-              }}
-            >
-              로그아웃
+    <header className="admin-header">
+      <div className="admin-header-inner">
+        <div className="admin-logo-wrap">
+          <img src="/logo.png" alt="logo" className="admin-logo" />
+        </div>
+        <div className="admin-header-actions">
+          {adminName ? (
+            <>
+              <span className="admin-header-name">{adminName} 님</span>
+              <button className="admin-header-btn" onClick={handleLogout}>
+                로그아웃
+              </button>
+            </>
+          ) : (
+            <button className="admin-header-btn" onClick={() => navigate('/administrator')}>
+              로그인
             </button>
-          </>
-        ) : (
+          )}
           <button
-            onClick={() => navigate('/administrator')}
-            style={{
-              background: '#bfa16b',
-              color: '#fff',
-              border: 'none',
-              borderRadius: 6,
-              padding: '8px 18px',
-              fontWeight: 'bold',
-              fontSize: 15,
-              cursor: 'pointer',
-              whiteSpace: 'nowrap'
-            }}
+            className="admin-hamburger"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="메뉴 열기"
           >
-            로그인
+            <span />
+            <span />
+            <span />
           </button>
-        )}
+        </div>
       </div>
+      <nav className={`admin-sidemenu ${menuOpen ? 'open' : ''}`}>
+        <div className="admin-menu-list">
+          <a href="/admin/semester" className="admin-menu-item">학기관리</a>
+          <a href="/admin/course" className="admin-menu-item">강좌관리</a>
+          <a href="/admin/member" className="admin-menu-item">회원관리</a>
+        </div>
+      </nav>
       <style>{`
         @media (max-width: 700px) {
-          .admin-header > div {
+          .admin-header-inner {
             padding: 0 8px !important;
             height: 48px !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
           }
-          .admin-header button {
+          .admin-header-btn {
             padding: 6px 10px !important;
             font-size: 13px !important;
           }
-          .admin-header span {
+          .admin-header-name {
             font-size: 14px !important;
+          }
+          .admin-hamburger {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: none;
+            border: none;
+            margin-left: 8px;
+            cursor: pointer;
+          }
+          .admin-hamburger span {
+            display: block;
+            height: 4px;
+            width: 28px;
+            background: #bfa16b;
+            margin: 5px 0;
+            border-radius: 2px;
+            transition: 0.3s;
+          }
+          .admin-sidemenu {
+            display: none;
+            position: absolute;
+            top: 48px;
+            left: 0;
+            width: 100vw;
+            background: #fff;
+            border-bottom: 2px solid #bfa16b;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            z-index: 150;
+            padding-top: 8px;
+          }
+          .admin-sidemenu.open {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .admin-menu-list a {
+            padding: 12px 0;
+            text-align: center;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #eee;
+            color: #3B2C1A;
+            background: none;
+            text-decoration: none;
           }
         }
       `}</style>
@@ -97,4 +119,4 @@ function AdminHeader() {
   );
 }
 
-export default AdminHeader; 
+export default AdminHeader;

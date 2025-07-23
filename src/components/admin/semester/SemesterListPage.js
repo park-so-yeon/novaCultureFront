@@ -55,7 +55,8 @@ function SemesterList({ onEdit }) {
           placeholder="학기명 검색"
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
-          className="border p-2 flex-grow"
+          className="admin-input"
+          style={{ width: 140 }}
         />
         <select
           value={statusFilter}

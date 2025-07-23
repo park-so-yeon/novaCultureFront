@@ -252,3 +252,186 @@ body, html {
   align-items: center;
   gap: 2px;
 } 
+
+/* 햄버거 버튼 기본 스타일 */
+.admin-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+  z-index: 200;
+}
+.admin-hamburger span {
+  display: block;
+  height: 4px;
+  width: 28px;
+  background: #bfa16b;
+  margin: 5px 0;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+
+@media (max-width: 1024px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+  .admin-sidemenu {
+    position: relative;
+    width: 100%;
+    min-height: auto;
+    border-right: none;
+    border-bottom: 2px solid #bfa16b;
+    flex-direction: row;
+    padding-top: 0;
+    align-items: flex-start;
+    z-index: 100;
+  }
+  .admin-main-content {
+    margin-left: 0;
+    padding: 24px 8px 8px 8px;
+  }
+  .admin-list-page {
+    padding: 16px 4px 12px 4px;
+    margin-top: 16px;
+  }
+  .admin-list-title {
+    font-size: 1.2rem;
+    padding-top: 8px;
+    margin-bottom: 10px;
+  }
+  .admin-list-toolbar {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .admin-list-btns {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .admin-table th, .admin-table td {
+    padding: 8px 4px;
+    font-size: 0.95rem;
+  }
+  .admin-list-footer {
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 600px) {
+    .admin-login-container {
+    padding: 18px 8px 16px 8px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 98vw;
+  }
+  .admin-login-container h2 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+  }
+  .admin-login-form {
+    gap: 10px;
+  }
+  .admin-input {
+    font-size: 1rem;
+    padding: 8px;
+    height: auto;
+  }
+  .admin-login-btn {
+    font-size: 0.95rem;
+    padding: 8px 0;
+    max-width: 100%;
+    height: 36px;
+  }
+  .admin-error-msg {
+    font-size: 0.95rem;
+    margin-top: 4px;
+  }
+  .admin-sidemenu {
+    flex-direction: column;
+    width: 100%;
+    padding: 0;
+    align-items: stretch;
+  }
+  .admin-logo-wrap {
+    margin-bottom: 16px;
+  }
+  .admin-logo {
+    width: 48px;
+    height: 48px;
+  }
+  .admin-menu-list {
+    gap: 8px;
+  }
+  .admin-menu-list a {
+    font-size: 1rem;
+    padding: 8px 0;
+  }
+  .admin-main-content {
+    padding: 12px 2px 2px 2px;
+  }
+  .admin-list-page {
+    padding: 8px 2px 6px 2px;
+    margin-top: 8px;
+  }
+  .admin-list-title {
+    font-size: 1rem;
+    padding-top: 4px;
+    margin-bottom: 6px;
+  }
+  .admin-table th, .admin-table td {
+    padding: 4px 2px;
+    font-size: 0.9rem;
+  }
+  .admin-list-btn {
+    padding: 6px 8px;
+    font-size: 0.95rem;
+  }
+  .admin-list-footer {
+    font-size: 0.9rem;
+  }
+  .admin-input {
+    font-size: 1rem;
+    padding: 8px;
+  }
+  .admin-hamburger {
+    display: flex;
+  }
+  .admin-sidemenu {
+    display: none;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    width: 100vw;
+    background: #fff;
+    border-bottom: 2px solid #bfa16b;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    z-index: 150;
+    padding-top: 8px;
+  }
+  .admin-sidemenu.open {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .admin-header {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    position: relative;
+    background: #fff;
+    border-bottom: 2px solid #bfa16b;
+    z-index: 200;
+  }
+  .admin-logo-wrap {
+    margin-bottom: 0;
+  }
+}
