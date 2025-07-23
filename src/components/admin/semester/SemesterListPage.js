@@ -47,9 +47,9 @@ function SemesterList({ onEdit }) {
   };
 
   return (
-    <div className="semester-list-page p-4">
-      <h2 className="text-xl mb-4">학기 목록</h2>
-      <div className="flex items-center space-x-2 mb-4">
+    <div className="admin-list-page">
+      <div className="admin-list-title">학기 목록</div>
+        <div className="admin-list-toolbar">
         <input
           type="text"
           placeholder="학기명 검색"
@@ -68,7 +68,7 @@ function SemesterList({ onEdit }) {
         </select>
       </div>
 
-      <table className="min-w-full bg-white">
+      <table className="admin-table">
         <thead>
           <tr>
             <th className="px-4 py-2">학기명</th>
@@ -112,6 +112,14 @@ function SemesterList({ onEdit }) {
           )}
         </tbody>
       </table>
+      <div className="admin-list-footer">
+        <button
+          onClick={() => onEdit({})}
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          학기 등록
+        </button>
+    </div>
     </div>
   );
 }
