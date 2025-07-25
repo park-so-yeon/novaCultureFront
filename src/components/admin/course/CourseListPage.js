@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../../admin.css';
 
 function CourseListPage() {
+
+  const navigate = useNavigate();
+
   const [courses, setCourses] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
@@ -43,7 +46,9 @@ function CourseListPage() {
               style={{ width: 140 }}
             />
             <button className="admin-list-btn">검색</button>
-            <Link to="/admin/courses/new" className="admin-list-btn">등록하기</Link>
+            <button className="admin-list-btn" onClick={() => navigate('/admin/courses/CourseRegPage')}>
+              등록하기
+            </button>
           </div>
         </div>
 
