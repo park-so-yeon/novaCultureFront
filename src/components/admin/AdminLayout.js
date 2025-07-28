@@ -16,25 +16,25 @@ export default function AdminLayout() {
         <nav className="admin-menu-list">
           {/* 학기관리 */}
           <div className="admin-menu-item"
-            onMouseEnter={() => setHoveredMenu('semesters')}
+            onMouseEnter={() => setHoveredMenu('semester')}
             onMouseLeave={() => setHoveredMenu(null)}>
             <Link
-              to="/admin/semesters"
-              className={location.pathname.startsWith('/admin/semesters') ? 'active' : ''}
+              to="/admin/semester"
+              className={location.pathname.startsWith('/admin/semester') ? 'active' : ''}
             >
               학기관리
             </Link>
-            {(hoveredMenu === 'semesters' || location.pathname.startsWith('/admin/semesters')) && (
+            {(hoveredMenu === 'semester' || location.pathname.startsWith('/admin/semester')) && (
               <div className="admin-submenu">
                 <Link
-                  to="/admin/semesters"
-                  className={location.pathname === '/admin/semesters' ? 'active' : ''}
+                  to="/admin/semester"
+                  className={location.pathname === '/admin/semester' ? 'active' : ''}
                 >
                   학기목록
                 </Link>
                 <Link
-                  to="/admin/semesters/new"
-                  className={location.pathname === '/admin/semesters/new' ? 'active' : ''}
+                  to="/admin/semester/register"
+                  className={location.pathname === '/admin/semester/register' ? 'active' : ''}
                 >
                   학기등록
                 </Link>

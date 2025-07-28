@@ -37,8 +37,7 @@ function CourseListPage() {
       <h2 className="admin-list-title">강좌 목록</h2>
       <div className="admin-list-page">
         <div className="admin-list-toolbar" style={{ justifyContent: 'flex-end' }}>
-          <div className="admin-list-search" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <label>Search: </label>
+          <div className="admin-list-search" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>W
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}

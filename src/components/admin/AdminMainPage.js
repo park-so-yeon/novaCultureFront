@@ -11,7 +11,7 @@ function AdminMainPage() {
           <img src="/nova_logo.jpg" alt="노바문화센터 로고" className="admin-logo" />
         </div>
         <nav className="admin-menu-list">
-          <Link to="/admin/semesters" className={location.pathname.startsWith('/admin/semesters') ? 'active' : ''}> 학기관리</Link>
+          <Link to="/admin/semester" className={location.pathname.startsWith('/admin/semester') ? 'active' : ''}> 학기관리</Link>
           <Link to="/admin/courses" className={location.pathname === '/admin/courses' ? 'active' : ''}>강좌관리</Link>
           <Link to="/admin/users" className={location.pathname === '/admin/users' ? 'active' : ''}>회원관리</Link>
           <Link to="/admin/reservations" className={location.pathname === '/admin/reservations' ? 'active' : ''}>예약관리</Link>
