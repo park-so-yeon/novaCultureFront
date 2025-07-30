@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../../../admin.css';
 
 function SemesterRegister() {
   const [form, setForm] = useState({

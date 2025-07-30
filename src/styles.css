@@ -1,4 +1,7 @@
-/* Reservation System Styles */
+html, body {
+  height: 100%;
+  margin: 0;
+}
 
 /* Common styles */
 .reservation-container {
@@ -306,11 +309,10 @@ body, .main-page {
   color: #3B2C1A;
   text-align: center;
   padding: 22px 0 16px 0;
-  border-radius: 32px 32px 0 0;
   margin: 40px 0 0 0;
   font-size: 1.05rem;
   box-shadow: none;
-  border-top: 2px solid #F3E9D2;
+  border-top: 1px solid #F3E9D2;
   width: 100%;
   box-sizing: border-box;
 }
@@ -774,9 +776,17 @@ body, .main-page {
   margin-top: 6px;
 }
 
-.page-container {
-  padding-top: 100px;
+.page-container{
+	margin-top:100px;
 }
+
+.page-container.auth-page {
+  padding-top: 0 !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 @media (max-width: 700px) {
   .page-container {
     padding-top: 70px;
@@ -1282,12 +1292,14 @@ body, .main-page {
 } 
 
 .auth-page {
+flex: 1; /* 로그인 폼을 가능한 높이로 확장 */
   color:#363945;
   background: #FDF6E3;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+	min-height: 100vh; /* 화면 전체 높이 채우기 */
 }
 
 .auth-form {

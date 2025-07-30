@@ -18,7 +18,7 @@ function AdminHeader() {
     <header className="admin-header">
       <div className="admin-header-inner">
         <div className="admin-logo-wrap">
-          <img src="/logo.png" alt="logo" className="admin-logo" />
+          <img src="/nova_logo.jpg" alt="logo" className="admin-logo" />
         </div>
         <div className="admin-header-actions">
           {adminName ? (
