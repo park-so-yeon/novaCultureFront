@@ -1,0 +1,38 @@
+.calendar-wrapper {
+  display: inline-block;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.custom-datepicker {
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 160px;
+  transition: 0.2s all ease;
+}
+
+.custom-datepicker:focus {
+  outline: none;
+  border-color: #8bb4f5;
+  box-shadow: 0 0 0 2px rgba(139, 180, 245, 0.3);
+}
+
+.custom-calendar {
+  font-family: 'Segoe UI', sans-serif;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.react-datepicker__header {
+  background-color: #f0f4ff;
+  border-bottom: none;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #4e8cff;
+  color: white;
+}

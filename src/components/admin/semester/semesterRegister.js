@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../../admin.css';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import CalendarComponent from '../../calendar/CalendarComponent';
 
 function SemesterRegister() {
   const navigate = useNavigate();
@@ -58,25 +57,12 @@ function SemesterRegister() {
 
             <div className="admin-form-group">
               <label>시작일</label>
-              <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                dateFormat="yyyy-MM-dd"
-                className="admin-input"
-                placeholderText="날짜 선택"
-              />
+              <CalendarComponent selectedDate={startDate} onChange={(date) => setStartDate(date)} />
             </div>
 
             <div className="admin-form-group">
               <label>종료일</label>
-              <DatePicker
-                selected={endDate}
-                onChange={(date) => setEndDate(date)}
-                dateFormat="yyyy-MM-dd"
-                className="admin-input"
-                placeholderText="날짜 선택"
-                minDate={startDate}
-              />
+              <CalendarComponent selectedDate={endDate} onChange={(date) => setEndDate(date)} />
             </div>
 
           {error && <p style={{ color: 'red' }}>{error}</p>}
