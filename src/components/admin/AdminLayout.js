@@ -15,27 +15,26 @@ export default function AdminLayout() {
         </div>
         <nav className="admin-menu-list">
           {/* 학기관리 */}
-          <div
-            onMouseEnter={() => setHoveredMenu('semesters')}
-            onMouseLeave={() => setHoveredMenu(null)}
-          >
+          <div className="admin-menu-item"
+            onMouseEnter={() => setHoveredMenu('semester')}
+            onMouseLeave={() => setHoveredMenu(null)}>
             <Link
-              to="/admin/semesters"
-              className={location.pathname.startsWith('/admin/semesters') ? 'active' : ''}
+              to="/admin/semester"
+              className={location.pathname.startsWith('/admin/semester') ? 'active' : ''}
             >
               학기관리
             </Link>
-            {(hoveredMenu === 'semesters' || location.pathname.startsWith('/admin/semesters')) && (
+            {(hoveredMenu === 'semester' || location.pathname.startsWith('/admin/semester')) && (
               <div className="admin-submenu">
                 <Link
-                  to="/admin/semesters"
-                  className={location.pathname === '/admin/semesters' ? 'active' : ''}
+                  to="/admin/semester"
+                  className={location.pathname === '/admin/semester' ? 'active' : ''}
                 >
                   학기목록
                 </Link>
                 <Link
-                  to="/admin/semesters/new"
-                  className={location.pathname === '/admin/semesters/new' ? 'active' : ''}
+                  to="/admin/semester/register"
+                  className={location.pathname === '/admin/semester/register' ? 'active' : ''}
                 >
                   학기등록
                 </Link>
@@ -44,7 +43,7 @@ export default function AdminLayout() {
           </div>
 
           {/* 강좌관리 */}
-          <div
+          <div className="admin-menu-item"
             onMouseEnter={() => setHoveredMenu('courses')}
             onMouseLeave={() => setHoveredMenu(null)}
           >
@@ -73,7 +72,7 @@ export default function AdminLayout() {
           </div>
 
           {/* 강사관리 */}
-          <div
+          <div className="admin-menu-item"
             onMouseEnter={() => setHoveredMenu('teachers')}
             onMouseLeave={() => setHoveredMenu(null)}
           >
@@ -102,7 +101,7 @@ export default function AdminLayout() {
           </div>
 
           {/* 회원관리 */}
-          <div
+          <div className="admin-menu-item"
             onMouseEnter={() => setHoveredMenu('users')}
             onMouseLeave={() => setHoveredMenu(null)}
           >
@@ -115,7 +114,7 @@ export default function AdminLayout() {
           </div>
 
           {/* 예약관리 */}
-          <div
+          <div className="admin-menu-item"
             onMouseEnter={() => setHoveredMenu('reservations')}
             onMouseLeave={() => setHoveredMenu(null)}
           >

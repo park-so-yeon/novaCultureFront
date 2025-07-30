@@ -96,7 +96,7 @@
   flex-direction: column;
   gap: 18px;
   width: 100%;
-  align-items: stretch;
+  align-items: center;
 }
 .admin-menu-list a {
   display: block;
@@ -176,6 +176,7 @@
   font-weight: bold;
   color: #3B2C1A;
   margin-bottom: 2px;
+  margin-right: 10px;
 }
 .admin-course-form input,
 .admin-course-form textarea {
@@ -228,6 +229,10 @@
   cursor: pointer;
   transition: background 0.18s, color 0.18s;
   text-decoration: none;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .admin-list-btn:hover:not(:disabled) {
   background: #bfa16b;
@@ -255,6 +260,7 @@
   align-items: center;
   gap: 2px;
 } 
+<<<<<<< HEAD
 
 /* 햄버거 버튼 기본 스타일 */
 .admin-hamburger {
@@ -444,4 +450,8 @@
   .admin-logo-wrap {
     margin-bottom: 0;
   }
+=======
+.admin-menu-item{
+  width: 100%;
+>>>>>>> 10f33729567fa58409d2086494635c245a57d041
 }

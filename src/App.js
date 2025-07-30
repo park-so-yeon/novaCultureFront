@@ -1,5 +1,4 @@
 // src/App.js
-import React from 'react';  
 import './App.css';
 import {
   BrowserRouter as Router,
@@ -26,6 +25,7 @@ import CourseRegPage from './components/admin/course/CourseRegPage';
 import TeacherListPage from './components/admin/teacher/TeacherListPage';
 import TeacherRegisterPage from './components/admin/teacher/TeacherRegisterPage';
 import SemesterListPage from './components/admin/semester/SemesterListPage';
+import SemesterRegister from './components/admin/semester/SemesterRegister';
 
 import ProtectedAdminRoute from './components/admin/ProtectedAdminRoute';
 import AdminLayout from './components/admin/AdminLayout';
@@ -64,8 +64,9 @@ function App() {
           <Route path="teachers"     element={<TeacherListPage />} />
           {/* /admin/teachers/new */}
           <Route path="teachers/new" element={<TeacherRegisterPage />} />
-          {/* /admin/semesters */}
-          <Route path="semesters"    element={<SemesterListPage />} />
+          {/* /admin/semester */}
+          <Route path="semester"            element={<SemesterListPage />} />
+          <Route path="semester/register"   element={<SemesterRegister />} />
           {/* 필요하면 users, reservations도 추가 */}
           {/* <Route path="users"        element={<UsersPage />} /> */}
           {/* <Route path="reservations" element={<ReservationsPage />} /> */}

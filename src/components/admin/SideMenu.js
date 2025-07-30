@@ -12,8 +12,8 @@ const SideMenu = ({ isAdmin }) => {
         </div>
         <nav className="menu-items">
           <Link
-            to="/admin/semesters"
-            className={`menu-item ${location.pathname === '/admin/semesters' ? 'active' : ''}`}
+            to="/admin/semester"
+            className={`menu-item ${location.pathname === '/admin/semester' ? 'active' : ''}`}
           >
             학기관리
           </Link>
