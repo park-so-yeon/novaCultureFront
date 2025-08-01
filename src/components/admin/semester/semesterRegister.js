@@ -1,13 +1,9 @@
-<<<<<<< HEAD
-import React, { useState } from 'react';
-import '../../../admin.css';
-=======
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../../../admin.css';
-import CalendarComponent from '../../calendar/CalendarComponent';
->>>>>>> 10f33729567fa58409d2086494635c245a57d041
+import '../admin.css';
+import CalendarComponent from '../../calendar/CalendarComponent.jsx';
 
 function SemesterRegister() {
   const navigate = useNavigate();

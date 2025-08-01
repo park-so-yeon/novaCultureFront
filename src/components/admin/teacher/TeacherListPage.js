@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../../../admin.css';
+import '../admin.css';
 
 const teachers = [
   { id: 1, name: '김강사', email: 'kim@nova.com', phone: '010-1111-2222', memo: '요가 전문' },

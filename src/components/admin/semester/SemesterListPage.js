@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-<<<<<<< HEAD
-=======
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
->>>>>>> 10f33729567fa58409d2086494635c245a57d041
-import '../../../admin.css';
+import '../admin.css';
 
 function SemesterList({ onEdit }) {
   const navigate = useNavigate();

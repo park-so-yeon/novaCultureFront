@@ -30,7 +30,7 @@ import SemesterRegister from './components/admin/semester/SemesterRegister';
 import ProtectedAdminRoute from './components/admin/ProtectedAdminRoute';
 import AdminLayout from './components/admin/AdminLayout';
 
-import './admin.css';
+import './components/admin/admin.css';
 
 function App() {
   return (

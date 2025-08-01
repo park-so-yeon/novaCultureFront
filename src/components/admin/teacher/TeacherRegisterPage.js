@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../../admin.css';
+import '../admin.css';
 
 function TeacherRegisterPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', memo: '' });
